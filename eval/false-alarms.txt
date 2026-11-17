@@ -1,0 +1,69 @@
+误报 39 张(读对了却被拦),共 100 张
+
+X51005568881.jpg  [REVIEW]  拦截提示: ocr_bad | items_sum_ne_subtotal | tax_not_in_text
+X51006414733.jpg  [REVIEW]  拦截提示: auto_corrected:total | ocr_bad | totals_dont_add_up | items_sum_ne_subtotal
+X51007231370.jpg  [REVIEW]  拦截提示: totals_dont_add_up
+X51006555817.jpg  [REVIEW]  拦截提示: auto_corrected:total | totals_dont_add_up | tax_rate_odd | payment_mismatch | tax_exceeds_subtotal
+X51006557198.jpg  [REVIEW]  拦截提示: totals_dont_add_up
+X51005268472.jpg  [REVIEW]  拦截提示: auto_corrected:total | totals_dont_add_up | items_sum_ne_subtotal
+X51005605284(4).jpg  [REVIEW]  拦截提示: totals_dont_add_up | items_sum_ne_subtotal
+X51006557179.jpg  [REVIEW]  拦截提示: totals_dont_add_up | items_sum_ne_subtotal | payment_mismatch
+X51006619561.jpg  [REVIEW]  拦截提示: auto_corrected:total | totals_dont_add_up | subtotal_is_total | items_sum_ne_subtotal | item_exceeds_total
+X51006008197.jpg  [REVIEW]  拦截提示: auto_corrected:total | items_sum_ne_subtotal
+X51005605284(3).jpg  [REVIEW]  拦截提示: totals_dont_add_up | items_sum_ne_subtotal
+X51005677331(1).jpg  [REVIEW]  拦截提示: ocr_bad | items_sum_ne_subtotal
+X51006557210.jpg  [REVIEW]  拦截提示: auto_corrected:total | totals_dont_add_up | payment_mismatch
+X51006557184.jpg  [REVIEW]  拦截提示: auto_corrected:total | totals_dont_add_up | paid_less_than_total
+X51005433492(1).jpg  [REVIEW]  拦截提示: tax_rate_odd
+X51006556650.jpg  [REVIEW]  拦截提示: auto_corrected:total | totals_dont_add_up | paid_less_than_total
+X51007225417.jpg  [REVIEW]  拦截提示: auto_corrected:total | payment_mismatch | change_not_in_text
+X51007339111.jpg  [REVIEW]  拦截提示: merchant_legal_name_differs
+X51008123446.jpg  [REVIEW]  拦截提示: items_sum_ne_subtotal
+X51008099049.jpg  [REVIEW]  拦截提示: tax_in_gst_holiday
+X51008164525.jpg  [REVIEW]  拦截提示: totals_dont_add_up
+X51005757201.jpg  [REVIEW]  拦截提示: auto_corrected:total | items_sum_ne_subtotal
+X51007339117.jpg  [REVIEW]  拦截提示: ocr_bad | merchant_legal_name_differs
+X51006387847.jpg  [REVIEW]  拦截提示: missing_date | tax_not_in_text
+X51006350763.jpg  [REVIEW]  拦截提示: tax_rate_odd
+X51005361883.jpg  [REVIEW]  拦截提示: items_sum_ne_subtotal
+X51006619854.jpg  [REVIEW]  拦截提示: tax_not_in_text
+X51005568880.jpg  [REVIEW]  拦截提示: auto_corrected:total | verifier_disagrees:date
+X51007846302.jpg  [REVIEW]  拦截提示: verifier_disagrees:date
+X51005719914.jpg  [REVIEW]  拦截提示: verifier_disagrees:date
+X51007339166.jpg  [REVIEW]  拦截提示: merchant_legal_name_differs
+X51006556839.jpg  [REVIEW]  拦截提示: auto_corrected:total | totals_dont_add_up | items_sum_ne_subtotal | payment_mismatch | item_exceeds_total
+X51006619566.jpg  [REVIEW]  拦截提示: tax_not_in_text
+X51005711452.jpg  [REVIEW]  拦截提示: auto_corrected:total | totals_dont_add_up | rounding_too_large
+X51006620189.jpg  [REVIEW]  拦截提示: totals_dont_add_up | items_sum_ne_subtotal | rounding_too_large
+X51007339113.jpg  [REVIEW]  拦截提示: merchant_legal_name_differs
+X51009453801.jpg  [REVIEW]  拦截提示: tax_rate_odd
+X51005605284.jpg  [REVIEW]  拦截提示: totals_dont_add_up | items_sum_ne_subtotal
+X51006557508.jpg  [REVIEW]  拦截提示: auto_corrected:total | totals_dont_add_up | payment_mismatch
+
+## 哪些提示拦住了读对的收据(一张可能有多条)
+  totals_dont_add_up                 18
+  items_sum_ne_subtotal              15
+  auto_corrected                     14
+  payment_mismatch                   6
+  ocr_bad                            4
+  tax_not_in_text                    4
+  tax_rate_odd                       4
+  merchant_legal_name_differs        4
+  verifier_disagrees                 3
+  item_exceeds_total                 2
+  paid_less_than_total               2
+  rounding_too_large                 2
+  tax_exceeds_subtotal               1
+  subtotal_is_total                  1
+  change_not_in_text                 1
+  tax_in_gst_holiday                 1
+  missing_date                       1
+
+## 只靠这一条提示就拦住的(放宽它,这些就能直接通过)
+  totals_dont_add_up                 3
+  tax_rate_odd                       3
+  merchant_legal_name_differs        3
+  items_sum_ne_subtotal              2
+  tax_not_in_text                    2
+  verifier_disagrees                 2
+  tax_in_gst_holiday                 1

@@ -1,0 +1,167 @@
+[
+  {
+    "name": "MY GST 含税价(商品价已含 6% GST,现金付款找零)",
+    "input": { "currency": "MYR", "items": [{ "qty": 1, "price": 15.9 }], "subtotal": 15.9, "tax": 0.9, "total": 15.9, "paid": 50, "change": 34.1 },
+    "expect": { "mode": "inclusive", "checks": { "total_formula": "ok", "items_vs_subtotal": "ok", "tax_rate": "ok", "payment_vs_total": "ok" }, "noFills": true, "params": { "tax_rate": { "rate": 6 } } }
+  },
+  {
+    "name": "税额为 0(含税与不含税无法区分)",
+    "input": { "currency": "MYR", "items": [{ "qty": 1, "price": 8 }, { "qty": 1, "price": 15 }, { "qty": 1, "price": 15 }, { "qty": 1, "price": 5 }, { "qty": 1, "price": 15 }], "subtotal": 58, "tax": 0, "total": 58 },
+    "expect": { "mode": "unknown", "checks": { "total_formula": "ok", "items_vs_subtotal": "ok" }, "absent": ["tax_rate"], "noFills": true }
+  },
+  {
+    "name": "美国餐厅:不含税价 + 小费,税率为地方税率",
+    "input": { "currency": "USD", "items": [{ "qty": 1, "price": 24 }, { "qty": 1, "price": 18.5 }], "subtotal": 42.5, "tax": 3.51, "tip": 8, "total": 54.01 },
+    "expect": { "mode": "exclusive", "checks": { "total_formula": "ok", "items_vs_subtotal": "ok", "tax_rate": "info" }, "params": { "tax_rate": { "kind": "local" } }, "noFills": true }
+  },
+  {
+    "name": "英国 VAT 含税价,没有小计 → 推算小计",
+    "input": { "currency": "GBP", "items": [{ "qty": 1, "price": 12.5 }, { "qty": 1, "price": 7.5 }], "tax": 3.33, "total": 20 },
+    "expect": { "mode": "inclusive", "checks": { "total_formula": "ok", "items_vs_subtotal": "ok", "tax_rate": "ok" }, "fills": [{ "field": "subtotal", "value": 20, "reason": "items_sum" }], "params": { "tax_rate": { "rate": 20 } } }
+  },
+  {
+    "name": "新加坡:服务费 10% + GST 9%(税基包含服务费)",
+    "input": { "currency": "SGD", "items": [{ "qty": 1, "price": 50 }], "subtotal": 50, "service_charge": 5, "tax": 4.95, "total": 59.95 },
+    "expect": { "mode": "exclusive", "checks": { "total_formula": "ok", "tax_rate": "ok" }, "params": { "tax_rate": { "rate": 9 } }, "noFills": true }
+  },
+  {
+    "name": "马来西亚现金舍入,舍入金额已写明",
+    "input": { "currency": "MYR", "items": [{ "qty": 1, "price": 27.1 }], "subtotal": 27.1, "tax": 1.63, "rounding": 0.02, "total": 28.75 },
+    "expect": { "mode": "exclusive", "checks": { "total_formula": "ok", "tax_rate": "ok" }, "absent": ["rounding_implied", "rounding_too_large"], "noFills": true }
+  },
+  {
+    "name": "马来西亚现金舍入,舍入金额没写 → 推算",
+    "input": { "currency": "MYR", "items": [{ "qty": 1, "price": 27.1 }], "subtotal": 27.1, "tax": 1.63, "total": 28.75 },
+    "expect": { "checks": { "total_formula": "ok", "rounding_implied": "info" }, "fills": [{ "field": "rounding", "value": 0.02, "reason": "implied_rounding" }] }
+  },
+  {
+    "name": "折扣已体现在小计里(商品合计 = 小计 + 折扣)",
+    "input": { "currency": "MYR", "items": [{ "qty": 1, "price": 60 }, { "qty": 1, "price": 60 }], "subtotal": 108, "discount": 12, "tax": 6.48, "total": 114.48 },
+    "expect": { "mode": "exclusive", "checks": { "total_formula": "ok", "items_vs_subtotal": "ok", "tax_rate": "ok" }, "params": { "items_vs_subtotal": { "refLabel": "subtotal_before_discount" } } }
+  },
+  {
+    "name": "小计是折扣前的数,折扣在最后扣",
+    "input": { "currency": "MYR", "items": [{ "qty": 1, "price": 60 }, { "qty": 1, "price": 60 }], "subtotal": 120, "discount": 12, "tax": 6.48, "total": 114.48 },
+    "expect": { "mode": "exclusive", "checks": { "total_formula": "ok", "items_vs_subtotal": "ok", "tax_rate": "ok" } }
+  },
+  {
+    "name": "总额笔误,付款信息和公式互相印证 → 建议更正总额",
+    "input": { "currency": "MYR", "items": [{ "qty": 1, "price": 10 }, { "qty": 1, "price": 5 }], "subtotal": 15, "tax": 0.9, "total": 19.9, "paid": 20, "change": 4.1 },
+    "expect": { "checks": { "total_formula": "fail", "payment_vs_total": "fail", "items_vs_subtotal": "ok", "tax_rate": "ok" }, "fills": [{ "field": "total", "value": 15.9, "reason": "agree_payment_formula", "replaces": 19.9 }], "params": { "total_formula": { "hint": "amount_missing" } } }
+  },
+  {
+    "name": "多出一行(税码 D 被当成商品):指出是哪一行",
+    "input": { "currency": "MYR", "items": [{ "qty": 1, "price": 8 }, { "qty": 1, "price": 15 }, { "qty": 1, "price": 15 }, { "qty": 1, "price": 5 }, { "qty": 1, "price": 15 }, { "qty": 1, "price": 5 }], "subtotal": 58, "tax": 0, "total": 58 },
+    "expect": { "checks": { "items_vs_subtotal": "fail", "total_formula": "ok" }, "params": { "items_vs_subtotal": { "extraItems": [3, 5] } } }
+  },
+  {
+    "name": "漏填税额:差额正好是 6% → 建议税额",
+    "input": { "currency": "MYR", "items": [{ "qty": 1, "price": 100 }], "subtotal": 100, "total": 106 },
+    "expect": { "checks": { "total_formula": "fail" }, "fills": [{ "field": "tax", "value": 6, "reason": "implied_tax" }], "params": { "total_formula": { "hint": "tax_missing" } } }
+  },
+  {
+    "name": "日本内税(8%):价格已含税",
+    "input": { "currency": "JPY", "items": [{ "qty": 1, "price": 1080 }, { "qty": 1, "price": 540 }], "tax": 120, "total": 1620 },
+    "expect": { "mode": "inclusive", "checks": { "total_formula": "ok", "items_vs_subtotal": "ok", "tax_rate": "ok" }, "fills": [{ "field": "subtotal", "value": 1620, "reason": "items_sum" }], "params": { "tax_rate": { "rate": 8 } } }
+  },
+  {
+    "name": "退款单(负数)",
+    "input": { "currency": "USD", "items": [{ "qty": 1, "price": -10 }], "total": -10 },
+    "expect": { "checks": { "non_positive_total": "warn" } }
+  },
+  {
+    "name": "付款不足",
+    "input": { "currency": "MYR", "total": 15.9, "paid": 10 },
+    "expect": { "checks": { "paid_less_than_total": "warn" } }
+  },
+  {
+    "name": "单价金额超过总额(多半读错了)",
+    "input": { "currency": "MYR", "items": [{ "qty": 1, "price": 500 }, { "qty": 1, "price": 5 }], "total": 15 },
+    "expect": { "checks": { "item_exceeds_total": "warn", "items_vs_subtotal": "fail" } }
+  },
+  {
+    "name": "瑞士现金舍入到 0.05",
+    "input": { "currency": "CHF", "items": [{ "qty": 1, "price": 12.33 }], "subtotal": 12.33, "tax": 0, "total": 12.35 },
+    "expect": { "checks": { "total_formula": "ok", "rounding_implied": "info" }, "fills": [{ "field": "rounding", "value": 0.02, "reason": "implied_rounding" }] }
+  },
+  {
+    "name": "美元没有现金舍入:差 0.02 就是错",
+    "input": { "currency": "USD", "items": [{ "qty": 1, "price": 28.73 }], "subtotal": 28.73, "tax": 0, "total": 28.75 },
+    "expect": { "checks": { "total_formula": "fail" }, "absent": ["rounding_implied"], "params": { "total_formula": { "hint": "amount_missing" } } }
+  },
+  {
+    "name": "马来西亚 SST:服务费 + 服务税(税基含服务费)",
+    "input": { "currency": "MYR", "items": [{ "qty": 1, "price": 100 }], "subtotal": 100, "service_charge": 10, "tax": 6.6, "total": 116.6 },
+    "expect": { "mode": "exclusive", "checks": { "total_formula": "ok", "tax_rate": "ok" }, "params": { "tax_rate": { "rate": 6 } } }
+  },
+  {
+    "name": "外送费/包装费(其他费用)",
+    "input": { "currency": "SGD", "items": [{ "qty": 1, "price": 25 }], "subtotal": 25, "fees": 3, "tax": 2.25, "total": 30.25 },
+    "expect": { "mode": "exclusive", "checks": { "total_formula": "ok", "tax_rate": "ok" } }
+  },
+  {
+    "name": "只有总额和付款信息",
+    "input": { "total": 65.5, "paid": 100, "change": 34.5 },
+    "expect": { "checks": { "payment_vs_total": "ok" }, "noFills": true }
+  },
+  {
+    "name": "舍入为负数且已写明",
+    "input": { "currency": "MYR", "items": [{ "qty": 1, "price": 30.91 }], "subtotal": 30.91, "rounding": -0.01, "total": 30.9 },
+    "expect": { "mode": "unknown", "checks": { "total_formula": "ok" }, "absent": ["rounding_implied"], "noFills": true }
+  },
+  {
+    "name": "没有小计的含税价收据 → 推算小计",
+    "input": { "currency": "MYR", "items": [{ "qty": 1, "price": 5.9 }, { "qty": 1, "price": 5.9 }, { "qty": 1, "price": 5.9 }], "tax": 0.99, "total": 17.7 },
+    "expect": { "mode": "inclusive", "checks": { "total_formula": "ok", "tax_rate": "ok" }, "fills": [{ "field": "subtotal", "value": 17.7, "reason": "items_sum" }] }
+  },
+  {
+    "name": "price 是单价(数量 2 × 4.50)",
+    "input": { "currency": "MYR", "items": [{ "qty": 2, "price": 4.5 }], "subtotal": 9, "tax": 0, "total": 9 },
+    "expect": { "checks": { "items_vs_subtotal": "ok", "total_formula": "ok" } }
+  },
+  {
+    "name": "price 已是行小计(数量 2,金额 9.00)",
+    "input": { "currency": "MYR", "items": [{ "qty": 2, "price": 9 }], "subtotal": 9, "tax": 0, "total": 9 },
+    "expect": { "checks": { "items_vs_subtotal": "ok", "total_formula": "ok" } }
+  },
+  {
+    "name": "折扣大于小计",
+    "input": { "currency": "MYR", "subtotal": 10, "discount": 25 },
+    "expect": { "checks": { "discount_exceeds_subtotal": "warn" } }
+  },
+  {
+    "name": "税率不可能(45%)",
+    "input": { "currency": "MYR", "items": [{ "qty": 1, "price": 100 }], "subtotal": 100, "tax": 45, "total": 145 },
+    "expect": { "checks": { "total_formula": "ok", "tax_rate": "warn" } }
+  },
+  {
+    "name": "多种税率混合(6% 和 0%),综合税率 3.6% 不算错",
+    "input": { "currency": "MYR", "items": [{ "qty": 1, "price": 60 }, { "qty": 1, "price": 40 }], "subtotal": 100, "tax": 3.6, "total": 103.6 },
+    "expect": { "mode": "exclusive", "checks": { "total_formula": "ok", "tax_rate": "info" }, "params": { "tax_rate": { "kind": "mixed" } } }
+  },
+  {
+    "name": "什么都没有只有总额",
+    "input": { "total": 10 },
+    "expect": { "checks": {}, "absent": ["total_formula", "items_vs_subtotal", "tax_rate", "payment_vs_total"], "noFills": true }
+  },
+  {
+    "name": "简单收据,没有税也没有小费",
+    "input": { "currency": "USD", "items": [{ "qty": 1, "price": 9.99 }, { "qty": 1, "price": 4.01 }], "subtotal": 14, "total": 14 },
+    "expect": { "checks": { "total_formula": "ok", "items_vs_subtotal": "ok" }, "noFills": true }
+  },
+  {
+    "name": "没读到总额,但有付款和找零 → 由付款推算",
+    "input": { "currency": "MYR", "paid": 50, "change": 34.1 },
+    "expect": { "fills": [{ "field": "total", "value": 15.9, "reason": "paid_minus_change" }] }
+  },
+  {
+    "name": "现金舍入后的付款核对(总额 28.75,付 30 找 1.25)",
+    "input": { "currency": "MYR", "total": 28.75, "paid": 30, "change": 1.25 },
+    "expect": { "checks": { "payment_vs_total": "ok" } }
+  },
+  {
+    "name": "大额收据不能放宽容差:1000 元小计差 3 块也是错(旧算法按 0.3% 会放过)",
+    "input": { "currency": "MYR", "items": [{ "qty": 1, "price": 1000 }], "subtotal": 1000, "tax": 60, "total": 1063 },
+    "expect": { "checks": { "total_formula": "fail" } }
+  }
+]

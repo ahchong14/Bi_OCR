@@ -1,0 +1,233 @@
+{
+ "createdAt": "2026-11-04T12:26:21.513Z",
+ "note": "合并 seed7(SROIE 全部 712 张用完,去重后 626 张);总额: Accepted total 是实付、现金抄成总额且找零版式乱的情况;tidyMerchant 尾巴数字不加 \\b",
+ "summary": {
+  "n": 626,
+  "fields": {
+   "total": {
+    "n": 625,
+    "ok": 605
+   },
+   "date": {
+    "n": 618,
+    "ok": 610
+   },
+   "company": {
+    "n": 626,
+    "ok": 562
+   }
+  },
+  "allOk": 539,
+  "status": {
+   "REVIEW": 313,
+   "AUTO_VERIFIED": 309,
+   "CORRECTED": 4
+  },
+  "autoPass": {
+   "n": 309,
+   "wrong": 19
+  },
+  "wrong": {
+   "n": 87,
+   "caught": 68
+  },
+  "falseAlarms": 249,
+  "reasons": [
+   {
+    "reason": "scanned_in_portal",
+    "flagged": 626,
+    "withError": 87
+   },
+   {
+    "reason": "auto_cleared",
+    "flagged": 575,
+    "withError": 81
+   },
+   {
+    "reason": "paid_from_text",
+    "flagged": 266,
+    "withError": 44
+   },
+   {
+    "reason": "date_day_first_assumed",
+    "flagged": 200,
+    "withError": 25
+   },
+   {
+    "reason": "auto_corrected",
+    "flagged": 175,
+    "withError": 29
+   },
+   {
+    "reason": "items_amount_recomputed",
+    "flagged": 162,
+    "withError": 22
+   },
+   {
+    "reason": "items_sum_ne_subtotal",
+    "flagged": 120,
+    "withError": 16
+   },
+   {
+    "reason": "totals_dont_add_up",
+    "flagged": 102,
+    "withError": 19
+   },
+   {
+    "reason": "merchant_legal_name_differs",
+    "flagged": 70,
+    "withError": 31
+   },
+   {
+    "reason": "payment_mismatch",
+    "flagged": 50,
+    "withError": 8
+   },
+   {
+    "reason": "ocr_bad",
+    "flagged": 41,
+    "withError": 10
+   },
+   {
+    "reason": "merchant_tidied",
+    "flagged": 28,
+    "withError": 6
+   },
+   {
+    "reason": "item_exceeds_total",
+    "flagged": 26,
+    "withError": 4
+   },
+   {
+    "reason": "single_ocr_unverified",
+    "flagged": 25,
+    "withError": 5
+   },
+   {
+    "reason": "tax_rate_odd",
+    "flagged": 22,
+    "withError": 6
+   },
+   {
+    "reason": "subtotal_is_total",
+    "flagged": 19,
+    "withError": 3
+   },
+   {
+    "reason": "tax_not_in_text",
+    "flagged": 17,
+    "withError": 3
+   },
+   {
+    "reason": "paid_less_than_total",
+    "flagged": 17,
+    "withError": 1
+   },
+   {
+    "reason": "items_rows_dropped",
+    "flagged": 12,
+    "withError": 2
+   },
+   {
+    "reason": "merchant_unsure",
+    "flagged": 10,
+    "withError": 7
+   },
+   {
+    "reason": "total_conflicts_with_text_rule",
+    "flagged": 10,
+    "withError": 5
+   },
+   {
+    "reason": "verifier_disagrees:total",
+    "flagged": 10,
+    "withError": 5
+   },
+   {
+    "reason": "rounding_too_large",
+    "flagged": 9,
+    "withError": 2
+   },
+   {
+    "reason": "tax_in_gst_holiday",
+    "flagged": 8,
+    "withError": 1
+   },
+   {
+    "reason": "change_not_in_text",
+    "flagged": 7,
+    "withError": 2
+   },
+   {
+    "reason": "missing_date",
+    "flagged": 7,
+    "withError": 2
+   },
+   {
+    "reason": "total_not_in_text",
+    "flagged": 6,
+    "withError": 4
+   },
+   {
+    "reason": "date_implausible",
+    "flagged": 5,
+    "withError": 5
+   },
+   {
+    "reason": "verifier_disagrees:date",
+    "flagged": 5,
+    "withError": 0
+   },
+   {
+    "reason": "tax_exceeds_subtotal",
+    "flagged": 3,
+    "withError": 1
+   },
+   {
+    "reason": "paid_not_in_text",
+    "flagged": 3,
+    "withError": 1
+   },
+   {
+    "reason": "merchant_from_text",
+    "flagged": 2,
+    "withError": 0
+   },
+   {
+    "reason": "tax_differs_by_rate",
+    "flagged": 2,
+    "withError": 0
+   },
+   {
+    "reason": "date_day_month_swapped",
+    "flagged": 2,
+    "withError": 1
+   },
+   {
+    "reason": "total_negative",
+    "flagged": 2,
+    "withError": 1
+   },
+   {
+    "reason": "missing_total",
+    "flagged": 2,
+    "withError": 2
+   },
+   {
+    "reason": "subtotal_not_in_text",
+    "flagged": 2,
+    "withError": 0
+   },
+   {
+    "reason": "missing_merchant",
+    "flagged": 1,
+    "withError": 1
+   },
+   {
+    "reason": "items_not_extracted",
+    "flagged": 1,
+    "withError": 1
+   }
+  ]
+ }
+}
